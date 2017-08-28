@@ -1,4 +1,4 @@
-# Donatello
+# Powershell-Install
 Donatello is a tool for installation, configuration and management of Windows based machines. 
 
 ## Key Features ##
