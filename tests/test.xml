@@ -9,9 +9,13 @@
 	</LocalUser>
 	<SetRegistry Name="Disable UAC" Path="HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system" Key="EnableLua" Value="0" />-->
     <Folder Name="Temp Test" Path="C:\TempTest" />
+    <Folder Name="Temp Test" Path="C:\TempAcl" />
+
 	<Share Name="TempTest Share" Path="C:\TempTest" ShareName="TempTestShare"> 
 		<User UserName="&UserName;" Password="&AdminPassword;"/>	
 	</Share>
+
+	<Acl Name="Test" User="Administrators" Rights="Read" InheritanceFlag="ContainerInherit,ObjectInherit" PropagationFlag="None" AccessControlType="Allow" Directory="C:\TempAcl" /> 
 
     <WindowsFeature Name="Web-Server" RealName="IIS">
 		<SubFeature Name="Web-ASP"/>
@@ -28,12 +32,18 @@
 	<WindowsFeature Name="NET-Framework-Features" RealName=".NET 3.5.1" />
 	<WindowsFeature Name="NET-Framework-45-Features"/>
 	
-    
+
     <Install InstallType="MSI" Name="7Zip" InstallerPath=".\tools\7z922-x64.msi">
 		<Verify VerifyType="UnInstall" DisplayName="7-Zip 9.22 (x64 edition)" />
 	</Install>
 	<Install InstallType="EXE" Name="Visual C++ 2012" InstallerPath=".\tools\vcredist_x64.exe">
 		<Verify VerifyType="UnInstall" DisplayName="Microsoft Visual C++ 2012 x64 Additional Runtime*" />
 	</Install>
+
+    <Powershell Order="1" Name="Remove Default Web site" Command="Remove-Website -Name 'Default Web Site'">
+		<Verify Command="((Get-Website -Name 'Default Web Site') -eq $null)" Message="Remove Default Web Site" />
+	</Powershell>
+	
+	<EnviromentVariable Name="ENV_TEST_VARIABLE" Value="ENV_TEST_VARIABLE" Level="Machine" />
 
 </Config>
