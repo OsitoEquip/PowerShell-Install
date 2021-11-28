@@ -3,6 +3,7 @@
 .\src\Tools\SqlLib.ps1 
 .\src\Tools\LocalUserLib.ps1 
 .\src\Tools\FileSystemLib.ps1 
+.\src\Tools\ConfigurationLib.ps1 
 
 function global:Get-Font {
            
@@ -358,31 +359,6 @@ function global:ExecuteInstall($installs)
 	}
 }
 
-#Set Registry
-
-function global:SetRegistry($registry)
-{
-	if($registry.Value -ne ((Get-Item HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system).GetValue($registry.Key)))
-	{
-		Set-itemproperty $registry.Path -name $registry.Key -value $registry.Value
-	}
-}
-
-function global:TestRegistry($registry)
-{
-	AssertEqual $registry.Value ((Get-Item HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system).GetValue($registry.Key)) $registry.Name
-	RaiseAssertions
-}
-
-function global:ExecuteSetRegistry($registries)
-{
-	foreach ($registry in $registries) 
-	{
-		if($creat) { SetRegistry($registry)}
-		if($test) { TestRegistry($registry)}
-	}
-}
-
 #PowerShell
 
 function global:RunPowershell($powerShell)
@@ -406,32 +382,6 @@ function global:ExecutePowerShell($powerShells)
 	{
 		if($creat) { RunPowershell($powerShell)}
 		if($test) { TestPowerShell($powerShell)}
-	}
-}
-
-#SetEnviromentVariable
-
-function global:SetVariable($variable)
-{
-	if([environment]::GetEnvironmentVariable($variable.Name,$variable.Level) -ne $variable.Value )
-	{
-		Write-Host "Setting Environment variable: $($variable.Name)"
-		[Environment]::SetEnvironmentVariable($variable.Name,$variable.Value,$variable.Level)
-	}
-}
-
-function global:TestVariable($variable)
-{
-	AssertEqual $variable.Value [environment]::GetEnvironmentVariable($variable.Name,$variable.Level) "Environment variable: $($variable.Name)"
-	RaiseAssertions
-}
-
-function global:ExecuteEnviromentVariable($variables)
-{
-	foreach ($variable in $variables ) 
-	{
-		if($creat) { SetVariable($variable)}
-		if($test) { TestVariable($variable)}
 	}
 }
 

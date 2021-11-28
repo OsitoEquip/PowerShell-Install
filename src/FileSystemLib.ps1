@@ -86,3 +86,35 @@ function global:ExecuteCacl($Cacls)
         if($test) { TestAcl($cacl)}
     }
 }
+
+# --------------------- Network Shares  ----------------------------------
+
+function global:SetShare($Share)
+{
+	if((GET-WMIOBJECT Win32_Share -filter "name='$($share.ShareName)'") -eq $null)
+	{
+		Write-Host "Setting share for: $($Share.Name)"
+		if($Share.User)
+		{
+			$user = "$env:ComputerName\$($share.User.UserName)"
+			New-SmbShare -Name $share.ShareName -Path $share.Path -FullAccess $user -ChangeAccess Everyone
+		}else{
+			$Shares=[WMICLASS]"WIN32_Share"
+			$Shares.Create($share.Path,$share.ShareName,0) 
+		}
+	}
+}
+
+function global:TestShare($Share)
+{
+	AssertEqual $true ((GET-WMIOBJECT Win32_Share -filter "name='$($share.ShareName)'") -ne $null) "Share exists, share name: $($Share.ShareName)"
+}
+
+function global:ExecuteShare($Shares)
+{
+	foreach ($share in $Shares) 
+	{
+		if($creat) { SetShare($share)}
+		if($test) { TestShare($share)}
+	}
+}

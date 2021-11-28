@@ -17,6 +17,7 @@
 
 	<Acl Name="Test" User="Administrators" Rights="Read" InheritanceFlag="ContainerInherit,ObjectInherit" PropagationFlag="None" AccessControlType="Allow" Directory="C:\TempAcl" /> 
 
+    <!--
     <WindowsFeature Name="Web-Server" RealName="IIS">
 		<SubFeature Name="Web-ASP"/>
 		<SubFeature Name="Web-Http-Redirect"/>
@@ -31,7 +32,7 @@
 	<WindowsFeature Name="SMTP-Server"/>
 	<WindowsFeature Name="NET-Framework-Features" RealName=".NET 3.5.1" />
 	<WindowsFeature Name="NET-Framework-45-Features"/>
-	
+	-->
 
     <Install InstallType="MSI" Name="7Zip" InstallerPath=".\tools\7z922-x64.msi">
 		<Verify VerifyType="UnInstall" DisplayName="7-Zip 9.22 (x64 edition)" />
