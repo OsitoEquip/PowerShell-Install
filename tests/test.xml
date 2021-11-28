@@ -13,4 +13,27 @@
 		<User UserName="&UserName;" Password="&AdminPassword;"/>	
 	</Share>
 
+    <WindowsFeature Name="Web-Server" RealName="IIS">
+		<SubFeature Name="Web-ASP"/>
+		<SubFeature Name="Web-Http-Redirect"/>
+		<SubFeature Name="Web-Http-Tracing"/>
+		<SubFeature Name="Web-Windows-Auth"/>
+		<SubFeature Name="Web-IP-Security"/>
+		<SubFeature Name="Web-URL-Auth"/>
+		<SubFeature Name="Web-Stat-Compression"/>
+		<SubFeature Name="Web-Dyn-Compression"/>
+		<SubFeature Name="Web-Mgmt-Console"/>
+	</WindowsFeature>
+	<WindowsFeature Name="SMTP-Server"/>
+	<WindowsFeature Name="NET-Framework-Features" RealName=".NET 3.5.1" />
+	<WindowsFeature Name="NET-Framework-45-Features"/>
+	
+    
+    <Install InstallType="MSI" Name="7Zip" InstallerPath=".\tools\7z922-x64.msi">
+		<Verify VerifyType="UnInstall" DisplayName="7-Zip 9.22 (x64 edition)" />
+	</Install>
+	<Install InstallType="EXE" Name="Visual C++ 2012" InstallerPath=".\tools\vcredist_x64.exe">
+		<Verify VerifyType="UnInstall" DisplayName="Microsoft Visual C++ 2012 x64 Additional Runtime*" />
+	</Install>
+
 </Config>
