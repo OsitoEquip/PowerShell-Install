@@ -2,6 +2,7 @@
 
 .\src\Tools\SqlLib.ps1 
 .\src\Tools\LocalUserLib.ps1 
+.\src\Tools\FileSystemLib.ps1 
 
 function global:Get-Font {
            
