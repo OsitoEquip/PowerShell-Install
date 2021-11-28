@@ -434,35 +434,6 @@ function global:ExecuteEnviromentVariable($variables)
 	}
 }
 
-#Directory access 
-
-function global:SetAcl($acl)
-{
-Write-Host "Set the Acl for, user: $($acl.User), directory: $($acl.Directory)"
-	if(((Get-Acl "$($acl.Directory)").AccessToString | findstr "$env:ComputerName\$($acl.User)") -eq $null)
-	{
-		Write-Host "Set the Acl for, user: $($acl.User), directory: $($acl.Directory)"
-		$aclDir = Get-Acl $acl.Directory						
-		$rule = New-Object System.Security.AccessControl.FileSystemAccessRule($acl.User, $acl.Rights, $acl.InheritanceFlag, $acl.PropagationFlag, $acl.AccessControlType)
-		$aclDir.AddAccessRule($rule)
-		Set-Acl $acl.Directory $aclDir
-	}
-}
-
-function global:TestAcl($acl)
-{
-	AssertEqual $true (((Get-Acl "$($acl.Directory)").AccessToString | findstr "$env:ComputerName\$($acl.User)") -ne $null) "Set ACL, Directory: $($acl.Name)"
-	RaiseAssertions
-}
-
-function global:ExecuteAcl($Acls)
-{
-	foreach ($acl in $Acls ) 
-	{
-		if($creat) { SetAcl($acl)}
-		if($test) { TestAcl($acl)}
-	}
-}
 
 #Special scripts
 
