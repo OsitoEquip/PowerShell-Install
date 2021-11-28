@@ -1,4 +1,7 @@
-﻿if (!(Test-Path variable:_TESTLIB)) { .\src\TestLib.ps1 }
+﻿if (!(Test-Path variable:_TESTLIB)) { .\src\Tools\TestLib.ps1 }
+
+.\src\Tools\SqlLib.ps1 
+.\src\Tools\LocalUserLib.ps1 
 
 function global:Get-Font {
            
@@ -41,13 +44,6 @@ function global:StartProcess([string] $command = $(throw "Missing: command param
             $process.WaitForExit();
         }
     }
-}
-
-function global:LocalUserExist([string] $UserName)
-{
-	$objComputer = [ADSI]("WinNT://$env:ComputerName,computer")
-	$colUsers = ($objComputer.psbase.children | Where-Object {$_.psBase.schemaClassName -eq "User"} | Select-Object -expand Name)
-	return $colUsers -contains $UserName
 }
 
 function global:Set-CertPermission([string]$CertName, [string]$User)
@@ -228,89 +224,6 @@ function global:ExecuteWebServer($webServer)
 	ExecuteSites($webServer.Site)
 }
 
-#Local Users
-
-function global:AddLocalUser($user)
-{
-	$UserExist = LocalUserExist($user.UserName)
-	if($UserExist -eq $false)
-	{
-		Write-Host "Adding User, user name: $($user.UserName)"
-		$cn = [ADSI]"WinNT://$env:ComputerName,Computer"
-		$luser = $cn.Create("User",$user.UserName)
-		$luser.SetPassword($user.Password)
-		$luser.setinfo()
-	
-		Write-Host "Set Password properties"
-		$luser = Get-WmiObject Win32_UserAccount -Filter ("Domain='{0}' and Name='{1}'" -f $env:ComputerName,$user.UserName)
-		$luser.PasswordChangeable = $user.PasswordChangeable
-		$luser.PasswordExpires = $user.PasswordExpires
-		$luser.Put()
-		
-		foreach($group in $user.Group)
-		{
-			Write-Host "Adding user: $($user.UserName) to group: $($group.Name)"
-			$group = [ADSI]"WinNT://$env:ComputerName/$($group.Name),group"
-			$group.Add("WinNT://$env:ComputerName/$($user.UserName),user")
-		}
-	}	
-}
-
-function global:DeleteLocalUser($user)
-{
-	$UserExist = LocalUserExist($user.UserName)
-	if($UserExist -eq $true)
-	{
-		Write-Host "Deleting User, user name: $($user.UserName)"
-		$server = [ADSI]"WinNT://$env:ComputerName,Computer"
-		$server.delete("user",$user.UserName)
-	}
-}
-
-function global:TestLocalUser($user)
-{
-	AssertEqual True (LocalUserExist($user.UserName)) "User exist, user name: $($user.UserName)"
-		
-	foreach($group in $user.Group)
-	{
-		#AssertEqual True (UserHasMembership $user.UserName, $group.Name) "User membership, user name: $($user.UserName), group name: $($group.Name)"
-	}
-	RaiseAssertions
-}
-
-function UserHasMembership
-{   
-    # Added the Param Switch 
-    Param(
-        [string]$user,
-        [string]$group
-    )
-
-    $cname = gc env:computername
-    $objUser = [ADSI]("WinNT://$user")
-    $objGroup = [ADSI]("WinNT://$cname/$group,group")
-    $members = $objGroup.Invoke('Members')
-    $found = $false
-
-    foreach($m in $members)
-    {
-        if($m.GetType().InvokeMember('Name', 'GetProperty', $null, $m, $null) -eq $user)
-        {
-            $found = $true
-        }
-    }
-    return $found
-}
-
-function global:ExecuteLocalUser($users)
-{
-	foreach ($user in $users) 
-	{
-		if($delete) { DeleteLocalUser($user)}
-		if($creat) { AddLocalUser($user)}
-		if($test) { TestLocalUser($user)}
-	}
-}	
 
 #Windows Features
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!DOCTYPE TestConfig [
+	<!ENTITY UserName "Admin">
+	<!ENTITY Password "P@ssword1">
+]>
+<Config>
+	<LocalUser UserName="&UserName;" Password="&Password;" FirstName="Test" LastName="User" PasswordNeverExpires="true" PasswordChangeable="true" >
+		<Group Name ="Administrators"/>
+	</LocalUser>
+	<!--<SetRegistry Name="Disable UAC" Path="HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system" Key="EnableLua" Value="0" />-->
+    <Folder Name="Temp Test" Path="C:\TempTest" />
+	<Share Name="TempTest Share" Path="C:\TempTest" ShareName="TempTestShare"> 
+		<User UserName="&UserName;" Password="&AdminPassword;"/>	
+	</Share>
+
+</Config>
