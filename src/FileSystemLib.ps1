@@ -13,7 +13,7 @@ function global:DeleteFolder($folder)
 {
     if((Test-Path ($folder.Path)))
     {
-        Write-Host "Deleting folder: folder name " $folder.Name
+        Write-Host "Deleting folder: folder name: '$($folder.Name)', folder path: '$($folder.Path)'"-ForegroundColor Cyan
         Delete-Directory($folder.Path)
     }
 }
@@ -21,6 +21,7 @@ function global:DeleteFolder($folder)
 function global:TestFolder($folder)
 {
 	AssertEqual True (Test-Path ($folder.Path)) "Folder exist, Folder name: $($folder.Name), Folder path: $($folder.Path)"
+	RaiseAssertions
 }
 
 function global:ExecuteFolder($folders)
@@ -33,6 +34,24 @@ function global:ExecuteFolder($folders)
     }
 }
 
+function global:Delete-Directory
+{
+    param([string]$source)
+    if((Test-Path $source) -eq $false) {return; }
+    Remove-Item $source -Force -Recurse
+}
+
+function global:Make-Directory
+{
+    param(
+        [string]$directory
+    )
+    if((Test-Path "$directory") -eq $false)
+	{
+		Write-Host "Creating $directory"
+		mkdir "$directory"
+	}
+}
 
 #++++++++++++++++++++ Directory Access ++++++++++++++++++++++++++++++
 function global:SetAcl($acl)
@@ -56,7 +75,7 @@ function global:SetAcl($acl)
 
 function global:TestAcl($acl)
 {
-	$acls = (Get-Acl "$($acl.Directory)")
+	#if (Test-Path ($acl.Directory) -eq $false ){ throw "folder dose not  exist" }
 	$uAcl = $acls.Access | Where {$_.IdentityReference -match "$($acl.User)"} | Where {$_.FileSystemRights -match "$($acl.Rights)"}
 
     AssertEqual $true ($uAcl.Count -gt 0) "ACL, Right: $($acl.Rights), Directory: $($acl.Directory), User: $($acl.User)"

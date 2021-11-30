@@ -1,9 +1,9 @@
 ﻿if (!(Test-Path variable:_TESTLIB)) { .\src\Tools\TestLib.ps1 }
 
-.\src\Tools\SqlLib.ps1 
-.\src\Tools\LocalUserLib.ps1 
-.\src\Tools\FileSystemLib.ps1 
-.\src\Tools\ConfigurationLib.ps1 
+.\src\SqlLib.ps1 
+.\src\LocalUserLib.ps1 
+.\src\ConfigurationLib.ps1 
+.\src\FileSystemLib.ps1 
 
 function global:Get-Font {
            
