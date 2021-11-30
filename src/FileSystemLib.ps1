@@ -1,4 +1,4 @@
-# ------------------ Folders -----------------------
+# ++++++++++++++++++ Folders ++++++++++++++++++++++
 
 function global:AddFolder($folder)
 {
@@ -34,7 +34,7 @@ function global:ExecuteFolder($folders)
 }
 
 
-#--------------------- Directory Access -------------------------------
+#++++++++++++++++++++ Directory Access ++++++++++++++++++++++++++++++
 function global:SetAcl($acl)
 {
 	$colRights = [System.Security.AccessControl.FileSystemRights]$acl.Rights 
@@ -87,7 +87,7 @@ function global:ExecuteCacl($Cacls)
     }
 }
 
-# --------------------- Network Shares  ----------------------------------
+# ++++++++++++++++++++ Network Shares  ++++++++++++++++++++++++++++++++++
 
 function global:SetShare($Share)
 {

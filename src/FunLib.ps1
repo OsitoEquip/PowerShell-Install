@@ -567,7 +567,7 @@ function global:ExecuteCert($certs)
 }
 
 
-# --------------------- Run as -----------------
+# ++++++++++++++++++++ Run as ++++++++++++++++
 
 function Start-NewProcess(
         [string]$pfile,

@@ -1,4 +1,4 @@
-#-------------- Local Users --------------------
+#++++++++++++++ Local Users ++++++++++++++++++++
 
 function global:AddLocalUser($user)
 {

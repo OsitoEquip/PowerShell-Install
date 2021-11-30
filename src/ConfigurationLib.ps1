@@ -1,4 +1,4 @@
-# --------------------- Registry ----------------------------------
+# ++++++++++++++++++++ Registry ++++++++++++++++++++++++++++++++++
 
 function global:Registry($registry)
 {
@@ -29,7 +29,7 @@ function global:ExecuteRegistry($registries)
 	}
 }
 
-# ------------------- SetEnviromentVariable ------------------------------
+# ++++++++++++++++++ SetEnviromentVariable ++++++++++++++++++++++++++++++
 
 function global:SetVariable($variable)
 {

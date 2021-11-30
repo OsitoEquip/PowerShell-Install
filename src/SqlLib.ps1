@@ -1,4 +1,4 @@
-# --------------------- SQL Scripts  ----------------------------------
+# ++++++++++++++++++++ SQL Scripts  ++++++++++++++++++++++++++++++++++
 
 
 function global:SetSqlScript($SqlScript)
@@ -27,7 +27,7 @@ function global:ExecuteSqlScript($SqlScripts)
 }
 
 
-# --------------------- SQL Users  ----------------------------------
+# ++++++++++++++++++++ SQL Users  ++++++++++++++++++++++++++++++++++
 
 function global:SetSqlLogin($SqlLogin)
 {
