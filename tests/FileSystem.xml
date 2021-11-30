@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config>
+    <Folder Name="Temp Test" Path="C:\TempTest" />
+    <Folder Name="Temp Test" Path="C:\TempAcl" />
+	<!-- <Acl Name="Test" User="Administrators" Rights="Read" InheritanceFlag="ContainerInherit,ObjectInherit" PropagationFlag="None" AccessControlType="Allow" Directory="C:\TempAcl" />  -->
+</Config>
