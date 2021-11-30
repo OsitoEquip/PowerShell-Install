@@ -14,7 +14,7 @@ Make-Directory(".\logs")
 $scriptName =$MyInvocation.MyCommand.Name
 try { 
     Stop-Transcript
-    Write-Host "Stoping old transcript"
+    Write-Host "Stoping old transcript" -BackgroundColor DarkGray -ForegroundColor Black
 } catch {}
 $runDate = Get-Date -Format "yyyy-MM-dd-HH-mm-ss"
 start-transcript "$PSScriptRoot\logs\$scriptName.$($env:ComputerName).$runDate.log" 
@@ -22,9 +22,13 @@ start-transcript "$PSScriptRoot\logs\$scriptName.$($env:ComputerName).$runDate.l
 foreach($item in $Config.Config.ChildNodes)
 {
 	$element = $($item.Get_Name())
-	Write-Host "Processing: $element"
+	Write-Host "--- Start Processing: '$element' ---" -BackgroundColor DarkGray -ForegroundColor Black
 	if($element -eq "#comment"){continue}
 	
 	Invoke-Expression "Execute$element(`$item)"
+	RaiseAssertions
+	Write-Host "--- End Processing: '$element' ---" -BackgroundColor DarkGray -ForegroundColor Black
+
 }
+
 stop-transcript -errorAction SilentlyContinue

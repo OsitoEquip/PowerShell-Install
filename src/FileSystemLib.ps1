@@ -1,10 +1,12 @@
+.\src\OutPutLib.ps1 
+
 # ++++++++++++++++++ Folders ++++++++++++++++++++++
 
 function global:AddFolder($folder)
 {
     if(!(Test-Path ($folder.Path)))
     {
-        Write-Host "Adding folder: folder name " $folder.Name
+        Write-Instruction "Adding folder: folder name " $folder.Name
         Make-Directory($folder.Path)
     }
 }
@@ -13,7 +15,7 @@ function global:DeleteFolder($folder)
 {
     if((Test-Path ($folder.Path)))
     {
-        Write-Host "Deleting folder: folder name: '$($folder.Name)', folder path: '$($folder.Path)'"-ForegroundColor Cyan
+        Write-Instruction "Deleting folder: folder name: '$($folder.Name)', folder path: '$($folder.Path)'"
         Delete-Directory($folder.Path)
     }
 }
@@ -21,7 +23,6 @@ function global:DeleteFolder($folder)
 function global:TestFolder($folder)
 {
 	AssertEqual True (Test-Path ($folder.Path)) "Folder exist, Folder name: $($folder.Name), Folder path: $($folder.Path)"
-	RaiseAssertions
 }
 
 function global:ExecuteFolder($folders)
@@ -48,7 +49,7 @@ function global:Make-Directory
     )
     if((Test-Path "$directory") -eq $false)
 	{
-		Write-Host "Creating $directory"
+		Write-Instruction "Creating $directory"
 		mkdir "$directory"
 	}
 }
@@ -78,7 +79,7 @@ function global:TestAcl($acl)
 	#if (Test-Path ($acl.Directory) -eq $false ){ throw "folder dose not  exist" }
 	$uAcl = $acls.Access | Where {$_.IdentityReference -match "$($acl.User)"} | Where {$_.FileSystemRights -match "$($acl.Rights)"}
 
-    AssertEqual $true ($uAcl.Count -gt 0) "ACL, Right: $($acl.Rights), Directory: $($acl.Directory), User: $($acl.User)"
+	AssertEqual $true ($uAcl.Count -gt 0) "ACL, Right: $($acl.Rights), Directory: $($acl.Directory), User: $($acl.User)"
 }
 
 function global:ExecuteAcl($Acls)
@@ -93,7 +94,7 @@ function global:ExecuteAcl($Acls)
 # CACLS
 function global:SetCacl($cacl)
 {
-	Write-Host "Set the CACLs for, user: $($cacl.User), directory: $($cacl.Directory)"
+	Write-Instruction "Set the CACLs for, user: $($cacl.User), directory: $($cacl.Directory)"
 	icacls "$($cacl.Directory) /grant $($cacl.User):$($cacl.Rights) /t"
 }
 
@@ -112,7 +113,7 @@ function global:SetShare($Share)
 {
 	if((GET-WMIOBJECT Win32_Share -filter "name='$($share.ShareName)'") -eq $null)
 	{
-		Write-Host "Setting share for: $($Share.Name)"
+		Write-Instruction "Setting share for: $($Share.Name)"
 		if($Share.User)
 		{
 			$user = "$env:ComputerName\$($share.User.UserName)"
